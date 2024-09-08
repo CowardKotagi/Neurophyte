@@ -1,0 +1,8 @@
+categories
+"0-999": "Progression Items",
+"1000-1999": "Progression Items",
+"2000-2999": "Documents",
+"3000-3999": "Documents",
+"4000-4999": "Medical Supplies, Food",
+"5000-5999": "Tools and Equipment",
+"6000-6999": "Meaningless Items",
