@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://brexq6tru7vth"]
+
+[ext_resource type="Script" path="res://Code/GenericInteractableArea.cs" id="1_fu2rp"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6wxrr"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_ty27y"]
+
+[node name="GenericInteractable" type="Area3D" groups=["Interactables"]]
+script = ExtResource("1_fu2rp")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_6wxrr")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
+mesh = SubResource("BoxMesh_ty27y")
+skeleton = NodePath("../..")

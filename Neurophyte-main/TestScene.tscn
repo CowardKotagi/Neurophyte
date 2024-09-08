@@ -1,0 +1,119 @@
+[gd_scene load_steps=12 format=3 uid="uid://c5748tfh1e3y8"]
+
+[ext_resource type="Material" uid="uid://c3pldd681c8f0" path="res://Assets/Materials/fogeffect-material.tres" id="1_n810k"]
+[ext_resource type="PackedScene" uid="uid://t20r1a4ipgcr" path="res://Player.tscn" id="2_q0n44"]
+[ext_resource type="PackedScene" uid="uid://bj383265qsqxg" path="res://GenericCamera.tscn" id="3_pfxce"]
+[ext_resource type="PackedScene" uid="uid://brexq6tru7vth" path="res://GenericInteractable.tscn" id="4_hk67o"]
+[ext_resource type="PackedScene" uid="uid://bi6egnycbmgbd" path="res://Assets/Models/Trees/Tree1/Tree1.glb" id="5_woflx"]
+[ext_resource type="Script" path="res://Code/InventoryUserInterface.cs" id="6_qx3va"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_p3re0"]
+ground_bottom_color = Color(0.647059, 0.654902, 0.670588, 1)
+
+[sub_resource type="Sky" id="Sky_t8rqo"]
+sky_material = SubResource("ProceduralSkyMaterial_p3re0")
+
+[sub_resource type="Environment" id="Environment_ufnit"]
+background_mode = 2
+background_energy_multiplier = 0.49
+sky = SubResource("Sky_t8rqo")
+
+[sub_resource type="GDScript" id="GDScript_hanaq"]
+script/source = "extends Node3D
+func ReceiveActivation():
+	self.queue_free()
+"
+
+[sub_resource type="GDScript" id="GDScript_y2el4"]
+script/source = "extends Node3D
+func Activate():
+	self.queue_free()
+"
+
+[node name="Node3D" type="Node3D"]
+
+[node name="Environment" type="Node" parent="."]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Environment"]
+environment = SubResource("Environment_ufnit")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Environment"]
+transform = Transform3D(0.65444, -0.68133, -0.327869, 0.654939, 0.294115, 0.696097, -0.377841, -0.670288, 0.63871, 0, 8.65488, 0)
+light_bake_mode = 1
+directional_shadow_mode = 1
+
+[node name="Geometry" type="Node" parent="."]
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0959473, -0.318477, 0.0324168)
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+size = Vector3(100, 0.4, 100)
+material = ExtResource("1_n810k")
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -34, 34, -24)
+material_override = ExtResource("1_n810k")
+use_collision = true
+collision_layer = 3
+size = Vector3(10, 81, 10)
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.5, 2, -24)
+use_collision = true
+collision_layer = 3
+size = Vector3(6, 5, 5)
+script = SubResource("GDScript_hanaq")
+
+[node name="CSGBox3D4" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.7595, 2, -23.8948)
+use_collision = true
+collision_layer = 3
+size = Vector3(6, 5, 5)
+script = SubResource("GDScript_hanaq")
+
+[node name="Tree1" parent="Geometry" instance=ExtResource("5_woflx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.291935, -0.175427, -25.99)
+
+[node name="Interactables" type="Node" parent="."]
+
+[node name="GenericInteractable" parent="Interactables" instance=ExtResource("4_hk67o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21, 0, -15)
+targetPath = NodePath("../../Geometry/CSGBox3D3")
+
+[node name="GenericInteractable2" parent="Interactables" instance=ExtResource("4_hk67o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 0, -15)
+targetPath = NodePath("../../Geometry/CSGBox3D4")
+
+[node name="Door" type="CSGBox3D" parent="Interactables" groups=["Interactables"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -33.5652, 0.992249, -18.9293)
+use_collision = true
+size = Vector3(1.99219, 2.9845, 0.350342)
+script = SubResource("GDScript_y2el4")
+
+[node name="Entities" type="Node" parent="."]
+
+[node name="Player" parent="Entities" instance=ExtResource("2_q0n44")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21, 1, -8)
+
+[node name="GenericCamera" parent="Entities" instance=ExtResource("3_pfxce")]
+targetNodePath = NodePath("../Player")
+
+[node name="InventoryUI" type="Control" parent="Entities"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1152.0
+offset_bottom = 648.0
+script = ExtResource("6_qx3va")
+
+[node name="ColorRect" type="ColorRect" parent="Entities/InventoryUI"]
+layout_mode = 2
+offset_right = 1152.0
+offset_bottom = 648.0
+color = Color(1, 0, 0, 0.215686)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Entities/InventoryUI"]
+layout_mode = 0
+offset_right = 1152.0
+offset_bottom = 648.0
