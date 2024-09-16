@@ -1,0 +1,58 @@
+[gd_scene load_steps=7 format=3 uid="uid://t20r1a4ipgcr"]
+
+[ext_resource type="Script" path="res://Code/PlayerMovement.cs" id="1_qpilp"]
+[ext_resource type="PackedScene" uid="uid://cfrhm4bvfmtfv" path="res://Assets/Models/Silas/Silas.glb" id="2_54tfs"]
+[ext_resource type="Script" path="res://Code/PlayerInventory.cs" id="3_8pkm2"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_nubfo"]
+radius = 0.3
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_8hvk0"]
+size = Vector3(1.2, 3, 1.6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_f1t4p"]
+size = Vector3(0, 1.4, 0.3)
+
+[node name="CharacterBody3D" type="CharacterBody3D"]
+collision_layer = 2
+collision_mask = 2
+floor_max_angle = 0.575959
+script = ExtResource("1_qpilp")
+
+[node name="Silas" parent="." instance=ExtResource("2_54tfs")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_nubfo")
+
+[node name="InteractionBox" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -0.507239)
+visible = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="InteractionBox"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.300293)
+shape = SubResource("BoxShape3D_8hvk0")
+
+[node name="GroundRayCast" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
+target_position = Vector3(0, -0.3, 0)
+
+[node name="ClimbDetection" type="Node3D" parent="."]
+
+[node name="CrownRayCast" type="RayCast3D" parent="ClimbDetection"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, 0)
+target_position = Vector3(0, 0, -1)
+
+[node name="ShapeCast" type="ShapeCast3D" parent="ClimbDetection"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("BoxShape3D_f1t4p")
+target_position = Vector3(0, 0, -0.8)
+
+[node name="ShapeCastRayCast" type="RayCast3D" parent="ClimbDetection"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, -1)
+target_position = Vector3(0, -3.8, 0)
+collision_mask = 2
+hit_back_faces = false
+
+[node name="Inventory" type="Node" parent="."]
+script = ExtResource("3_8pkm2")

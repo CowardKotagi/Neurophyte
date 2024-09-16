@@ -1,0 +1,30 @@
+[gd_scene load_steps=4 format=3 uid="uid://ck1lfhtprcba4"]
+
+[ext_resource type="Theme" uid="uid://dck01l3ljgdcm" path="res://Assets/Data/Theme/new_theme.tres" id="1_2t31b"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_ucofu"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ee8dw"]
+width = 32
+height = 32
+noise = SubResource("FastNoiseLite_ucofu")
+
+[node name="HBoxContainer" type="HBoxContainer"]
+
+[node name="Name" type="Label" parent="."]
+layout_mode = 2
+theme = ExtResource("1_2t31b")
+text = "KeyCard"
+
+[node name="Description" type="Label" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("1_2t31b")
+text = "Description"
+
+[node name="Icon" type="TextureRect" parent="."]
+layout_direction = 3
+layout_mode = 2
+texture = SubResource("NoiseTexture2D_ee8dw")
+expand_mode = 3
+stretch_mode = 4

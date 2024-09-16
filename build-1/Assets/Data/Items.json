@@ -1,0 +1,30 @@
+[
+	{
+		"Id": 1000,
+		"Name": "TestItem",
+		"Icon": "TestItem.jpg",
+		"Description": "You should not have this...",
+		"Value": 1
+	},
+	{
+		"Id": 1001,
+		"Name": "Broken Plate",
+		"Icon": "BrokenPlateIcon.jpg",
+		"Description": "A sharp, broken plate...",
+		"Value": 1
+	},
+	{
+		"Id": 1002,
+		"Name": "Key",
+		"Icon": "KeyIcon.jpg",
+		"Description": "A key. Might unlock something...",
+		"Value": 4
+	},
+	{
+		"Id": 1003,
+		"Name": "Black Friend",
+		"Icon": "BlackFriendIcon.jpg",
+		"Description": "He got robbed...",
+		"Value": 12
+	}
+]

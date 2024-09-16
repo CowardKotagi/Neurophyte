@@ -1,0 +1,230 @@
+[gd_scene load_steps=17 format=3 uid="uid://c5748tfh1e3y8"]
+
+[ext_resource type="Material" uid="uid://c3pldd681c8f0" path="res://Assets/Materials/fogeffect-material.tres" id="1_ero33"]
+[ext_resource type="PackedScene" uid="uid://bi6egnycbmgbd" path="res://Assets/Models/Trees/Tree1/Tree1.glb" id="2_egxyg"]
+[ext_resource type="PackedScene" uid="uid://cjer4pc0ta7av" path="res://Assets/Models/Jarell/Jarell.glb" id="3_0at0n"]
+[ext_resource type="PackedScene" uid="uid://caad0w0lwjpn2" path="res://Assets/Scenes/ItemPrefabs/TestItem.tscn" id="4_eioxk"]
+[ext_resource type="PackedScene" uid="uid://brexq6tru7vth" path="res://Assets/Scenes/PropPrefabs/GenericInteractable.tscn" id="4_pi4ws"]
+[ext_resource type="PackedScene" uid="uid://bbml58gfulv21" path="res://Assets/Scenes/ItemPrefabs/BrokenPlate.tscn" id="5_7ntfs"]
+[ext_resource type="PackedScene" uid="uid://t20r1a4ipgcr" path="res://Assets/Scenes/Misc/Player.tscn" id="5_efkql"]
+[ext_resource type="PackedScene" uid="uid://bj383265qsqxg" path="res://Assets/Scenes/Misc/GenericCamera.tscn" id="6_rieq4"]
+[ext_resource type="Script" path="res://Code/InventoryUserInterface.cs" id="7_5yq65"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_p3re0"]
+ground_bottom_color = Color(0.647059, 0.654902, 0.670588, 1)
+
+[sub_resource type="Sky" id="Sky_t8rqo"]
+sky_material = SubResource("ProceduralSkyMaterial_p3re0")
+
+[sub_resource type="Environment" id="Environment_ufnit"]
+background_mode = 2
+background_energy_multiplier = 0.49
+sky = SubResource("Sky_t8rqo")
+
+[sub_resource type="GDScript" id="GDScript_hanaq"]
+script/source = "extends Node3D
+func ReceiveActivation():
+	self.queue_free()
+"
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_rg5w1"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_5qaoq"]
+
+[sub_resource type="GDScript" id="GDScript_y2el4"]
+script/source = "extends Node3D
+var target: Node3D
+func Activate() -> void:
+	if !target or self.get_children().size() <= 0: return
+	var random_child = self.get_children()[randi() % self.get_children().size()]
+	target.global_position = random_child.global_position
+func AssignTarget(input_target: Node3D) -> void:
+	target = input_target
+"
+
+[node name="Node3D" type="Node3D"]
+
+[node name="Environment" type="Node" parent="."]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Environment"]
+environment = SubResource("Environment_ufnit")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Environment"]
+transform = Transform3D(0.65444, -0.68133, -0.327869, 0.654939, 0.294115, 0.696097, -0.377841, -0.670288, 0.63871, 0, 8.65488, 0)
+light_bake_mode = 1
+directional_shadow_mode = 1
+
+[node name="Geometry" type="Node" parent="."]
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0959473, -0.318477, 0.0324168)
+use_collision = true
+collision_layer = 3
+collision_mask = 3
+size = Vector3(100, 0.4, 100)
+material = ExtResource("1_ero33")
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -34, 34, -24)
+material_override = ExtResource("1_ero33")
+use_collision = true
+collision_layer = 3
+size = Vector3(10, 81, 10)
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.5, 2, -24)
+use_collision = true
+collision_layer = 3
+size = Vector3(6, 5, 5)
+script = SubResource("GDScript_hanaq")
+
+[node name="CSGBox3D4" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.7595, 2, -23.8948)
+use_collision = true
+collision_layer = 3
+size = Vector3(6, 5, 5)
+script = SubResource("GDScript_hanaq")
+
+[node name="CSGBox3D5" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(0.965926, -0.258819, 0, 0.258819, 0.965926, 0, 0, 0, 1, -9.81948, -0.871192, 3)
+use_collision = true
+collision_layer = 3
+size = Vector3(11, 4, 7)
+
+[node name="Tree1" parent="Geometry" instance=ExtResource("2_egxyg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.291935, -0.175427, -25.99)
+
+[node name="Jarell" parent="Geometry" instance=ExtResource("3_0at0n")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -28, 0, -18)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Geometry"]
+transform = Transform3D(3.4641, -2, 0, 2, 3.4641, 0, 0, 0, 4, -9, -1, -3)
+collision_layer = 3
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Geometry/StaticBody3D"]
+shape = SubResource("BoxShape3D_rg5w1")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Geometry/StaticBody3D"]
+mesh = SubResource("BoxMesh_5qaoq")
+
+[node name="StaticBody3D2" type="StaticBody3D" parent="Geometry"]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 1, -1.2792, -6)
+collision_layer = 3
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Geometry/StaticBody3D2"]
+shape = SubResource("BoxShape3D_rg5w1")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Geometry/StaticBody3D2"]
+mesh = SubResource("BoxMesh_5qaoq")
+
+[node name="StaticBody3D3" type="StaticBody3D" parent="Geometry"]
+transform = Transform3D(6, 0, 0, 0, 4, 0, 0, 0, 4, 0, 1.76341, -10.0009)
+collision_layer = 3
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Geometry/StaticBody3D3"]
+shape = SubResource("BoxShape3D_rg5w1")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Geometry/StaticBody3D3"]
+mesh = SubResource("BoxMesh_5qaoq")
+
+[node name="StaticBody3D4" type="StaticBody3D" parent="Geometry"]
+transform = Transform3D(4, 0, 0, 0, 12, 0, 0, 0, 4, 1, -0.360805, -17.3347)
+collision_layer = 3
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Geometry/StaticBody3D4"]
+shape = SubResource("BoxShape3D_rg5w1")
+
+[node name="StaticBody3D5" type="StaticBody3D" parent="Geometry"]
+transform = Transform3D(4, 0, 0, 0, 8, 0, 0, 0, 4, 5, 5.76341, -14.0009)
+collision_layer = 3
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Geometry/StaticBody3D5"]
+shape = SubResource("BoxShape3D_rg5w1")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Geometry/StaticBody3D5"]
+mesh = SubResource("BoxMesh_5qaoq")
+
+[node name="StaticBody3D6" type="StaticBody3D" parent="Geometry"]
+transform = Transform3D(1.03528, 3.8637, 0, -3.8637, 1.03528, 0, 0, 0, 4, 7, 3.76341, -9.00093)
+collision_layer = 3
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Geometry/StaticBody3D6"]
+shape = SubResource("BoxShape3D_rg5w1")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Geometry/StaticBody3D6"]
+mesh = SubResource("BoxMesh_5qaoq")
+
+[node name="StaticBody3D7" type="StaticBody3D" parent="Geometry"]
+transform = Transform3D(3, 0, 0, 0, 1, 0, 0, 0, 3, -11, -0.584156, -10.0009)
+collision_layer = 3
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Geometry/StaticBody3D7"]
+shape = SubResource("BoxShape3D_rg5w1")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Geometry/StaticBody3D7"]
+mesh = SubResource("BoxMesh_5qaoq")
+
+[node name="StaticBody3D8" type="StaticBody3D" parent="Geometry"]
+transform = Transform3D(3, 0, 0, 0, 1, 0, 0, 0, 3, -8, -0.279654, -10.0009)
+collision_layer = 3
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Geometry/StaticBody3D8"]
+shape = SubResource("BoxShape3D_rg5w1")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Geometry/StaticBody3D8"]
+mesh = SubResource("BoxMesh_5qaoq")
+
+[node name="Interactables" type="Node" parent="."]
+
+[node name="GenericInteractable" parent="Interactables" instance=ExtResource("4_pi4ws")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21, 0, -15)
+targetPath = NodePath("../../Geometry/CSGBox3D3")
+
+[node name="GenericInteractable2" parent="Interactables" instance=ExtResource("4_pi4ws")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 0, -15)
+targetPath = NodePath("../../Geometry/CSGBox3D4")
+
+[node name="Door" type="CSGBox3D" parent="Interactables" groups=["Interactables"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -33.5652, 0.992249, -18.9293)
+use_collision = true
+collision_layer = 3
+size = Vector3(1.99219, 2.9845, 0.350342)
+script = SubResource("GDScript_y2el4")
+
+[node name="Marker3D" type="Marker3D" parent="Interactables/Door"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 5.59174, 0.895273)
+
+[node name="Marker3D2" type="Marker3D" parent="Interactables/Door"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 11.1835, 1.79055)
+
+[node name="TestItem" parent="Interactables" instance=ExtResource("4_eioxk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -31, 0, -7)
+
+[node name="BrokenPlate" parent="Interactables" instance=ExtResource("5_7ntfs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28, 0, -2)
+
+[node name="Entities" type="Node" parent="."]
+
+[node name="Player" parent="Entities" instance=ExtResource("5_efkql")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21, 1, -8)
+
+[node name="GenericCamera" parent="Entities" instance=ExtResource("6_rieq4")]
+targetNodePath = NodePath("../Player")
+
+[node name="InventoryUI" type="Control" parent="Entities"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1152.0
+offset_bottom = 648.0
+script = ExtResource("7_5yq65")
+
+[node name="ColorRect" type="ColorRect" parent="Entities/InventoryUI"]
+layout_mode = 2
+offset_right = 1152.0
+offset_bottom = 648.0
+color = Color(1, 0, 0, 0.215686)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Entities/InventoryUI"]
+layout_mode = 0
+offset_right = 1152.0
+offset_bottom = 648.0

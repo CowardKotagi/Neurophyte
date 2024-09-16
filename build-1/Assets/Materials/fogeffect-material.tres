@@ -1,0 +1,9 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://c3pldd681c8f0"]
+
+[ext_resource type="Texture2D" uid="uid://cock0uyuxgmah" path="res://Assets/Images/GREYTILE.png" id="1_a76w3"]
+
+[resource]
+albedo_texture = ExtResource("1_a76w3")
+uv1_triplanar = true
+uv2_world_triplanar = true
+proximity_fade_distance = 0.01
